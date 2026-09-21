@@ -33,16 +33,16 @@
 
 | Official Assignment 2 Requirement | Implementation Strategy | Exact Source File(s) | Verification Status |
 | :--- | :--- | :--- | :--- |
-| **Normalized Prisma Relational Schema** | Defined `User`, `Tenant`, `Role`, `Membership`, `Transaction`, `AuditLog`, `EmailEvent` | [`prisma/schema.prisma`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/prisma/schema.prisma) | ✅ PASS |
-| **Automated Faker.js Seeding** | Deterministic multi-tenant seed generating 3 roles, 3 tenants, 23 users, 55 transactions | [`prisma/seed.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/prisma/seed.ts) | ✅ PASS |
-| **Reset & Seed Pipeline** | Single-pass TypeScript CLI executing push, client generation, and seeding | [`scripts/db-reset-seed.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/scripts/db-reset-seed.ts) | ✅ PASS |
-| **Better Auth Multi-Tenant RBAC** | Prisma adapter, password credentials, and tenant-scoped role checks | [`lib/auth.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/lib/auth.ts), [`lib/authorization/`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/lib/authorization/) | ✅ PASS |
-| **Proxy / Middleware Auth Gate** | Node.js runtime early auth gate rejecting unauthenticated requests | [`proxy.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/proxy.ts), [`middleware.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/middleware.ts) | ✅ PASS |
-| **Protected Server Actions & Routes** | Authoritative backend session, tenant bounds, and role checks | [`actions/transactions.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/actions/transactions.ts), [`app/api/transactions/route.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/app/api/transactions/route.ts) | ✅ PASS |
-| **React Email & Resend Alerts** | Accessible email template and post-commit notification service | [`components/emails/TransactionAlertEmail.tsx`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/components/emails/TransactionAlertEmail.tsx), [`lib/services/email-service.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/lib/services/email-service.ts) | ✅ PASS |
-| **Resend Webhook & Idempotency** | Raw-body Svix verification, `providerEventId` unique index deduplication | [`app/api/webhooks/resend/route.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/app/api/webhooks/resend/route.ts) | ✅ PASS |
-| **Mongoose Object Database (CO4)** | MongoDB connection and raw webhook event archiving model | [`lib/mongodb.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/lib/mongodb.ts), [`models/ResendWebhookArchive.ts`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/models/ResendWebhookArchive.ts) | ✅ PASS |
-| **2-Page Architecture Note** | Complete architectural document with Mermaid diagrams | [`docs/ASSIGNMENT_2_ARCHITECTURE.md`](file:///d:/SCIENCE/DJS%20AIML/SEM%205/FST_2/docs/ASSIGNMENT_2_ARCHITECTURE.md) | ✅ PASS |
+| **Normalized Prisma Relational Schema** | Defined `User`, `Tenant`, `Role`, `Membership`, `Transaction`, `AuditLog`, `EmailEvent` | [`prisma/schema.prisma`](./prisma/schema.prisma) | ✅ PASS |
+| **Automated Faker.js Seeding** | Deterministic multi-tenant seed generating 3 roles, 3 tenants, 23 users, 55 transactions | [`prisma/seed.ts`](./prisma/seed.ts) | ✅ PASS |
+| **Reset & Seed Pipeline** | Single-pass TypeScript CLI executing push, client generation, and seeding | [`scripts/db-reset-seed.ts`](./scripts/db-reset-seed.ts) | ✅ PASS |
+| **Better Auth Multi-Tenant RBAC** | Prisma adapter, password credentials, and tenant-scoped role checks | [`lib/auth.ts`](./lib/auth.ts), [`lib/authorization/`](./lib/authorization/) | ✅ PASS |
+| **Proxy / Middleware Auth Gate** | Node.js runtime early auth gate rejecting unauthenticated requests | [`proxy.ts`](./proxy.ts), [`middleware.ts`](./middleware.ts) | ✅ PASS |
+| **Protected Server Actions & Routes** | Authoritative backend session, tenant bounds, and role checks | [`actions/transactions.ts`](./actions/transactions.ts), [`app/api/transactions/route.ts`](./app/api/transactions/route.ts) | ✅ PASS |
+| **React Email & Resend Alerts** | Accessible email template and post-commit notification service | [`components/emails/TransactionAlertEmail.tsx`](./components/emails/TransactionAlertEmail.tsx), [`lib/services/email-service.ts`](./lib/services/email-service.ts) | ✅ PASS |
+| **Resend Webhook & Idempotency** | Raw-body Svix verification, `providerEventId` unique index deduplication | [`app/api/webhooks/resend/route.ts`](./app/api/webhooks/resend/route.ts) | ✅ PASS |
+| **Mongoose Object Database (CO4)** | MongoDB connection and raw webhook event archiving model | [`lib/mongodb.ts`](./lib/mongodb.ts), [`models/ResendWebhookArchive.ts`](./models/ResendWebhookArchive.ts) | ✅ PASS |
+| **2-Page Architecture Note** | Complete architectural document with Mermaid diagrams | [`docs/ASSIGNMENT_2_ARCHITECTURE.md`](./docs/ASSIGNMENT_2_ARCHITECTURE.md) | ✅ PASS |
 
 ---
 
