@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -------------------------------------------------------------
+// Better Auth Core Persistence Models
+// -------------------------------------------------------------
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  emailVerified Boolean      @default(false)
+  image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  
+  // Relations
+  sessions      Session[]
+  accounts      Account[]
+  memberships   Membership[]
+  transactions  Transaction[]
+  auditLogs     AuditLog[]   @relation("ActorAuditLogs")
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+// -------------------------------------------------------------
+// Multi-Tenant, RBAC & Core Domain Models
+// -------------------------------------------------------------
+
+enum RoleName {
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  name        RoleName     @unique
+  description String
+  memberships Membership[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("role")
+}
+
+model Tenant {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Relations
+  memberships  Membership[]
+  transactions Transaction[]
+  auditLogs    AuditLog[]
+  emailEvents  EmailEvent[]
+
+  @@map("tenant")
+}
+
+model Membership {
+  id        String   @id @default(cuid())
+  userId    String
+  tenantId  String
+  roleId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId])
+  @@index([tenantId])
+  @@index([userId])
+  @@map("membership")
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Transaction {
+  id              String            @id @default(cuid())
+  tenantId        String
+  createdByUserId String
+  reference       String            @unique
+  amount          Decimal           @db.Decimal(12, 2)
+  currency        String            @default("USD")
+  status          TransactionStatus @default(PENDING)
+  description     String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  tenant          Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdByUser   User              @relation(fields: [createdByUserId], references: [id], onDelete: Cascade)
+  emailEvents     EmailEvent[]
+
+  @@index([tenantId])
+  @@index([createdByUserId])
+  @@map("transaction")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  tenantId    String
+  actorUserId String
+  action      String
+  entity      String
+  entityId    String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  actorUser   User     @relation("ActorAuditLogs", fields: [actorUserId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([actorUserId])
+  @@map("audit_log")
+}
+
+enum EmailEventType {
+  SENT
+  DELIVERED
+  BOUNCED
+  FAILED
+}
+
+enum EmailEventSource {
+  SEED
+  RESEND_WEBHOOK
+}
+
+model EmailEvent {
+  id                String           @id @default(cuid())
+  tenantId          String
+  transactionId     String?
+  providerEventId   String           @unique
+  providerMessageId String?
+  eventType         EmailEventType
+  recipient         String
+  source            EmailEventSource @default(RESEND_WEBHOOK)
+  payload           Json?
+  occurredAt        DateTime         @default(now())
+  createdAt         DateTime         @default(now())
+
+  tenant            Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  transaction       Transaction?     @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([providerMessageId])
+  @@map("email_event")
+}
