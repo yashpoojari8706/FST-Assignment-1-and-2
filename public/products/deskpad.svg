@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="g-desk" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="28" fill="#f1f5f9" />
+  <!-- Felt Mat -->
+  <rect x="25" y="60" width="150" height="85" rx="10" fill="url(#g-desk)" stroke="#cbd5e1" stroke-width="2"/>
+  <!-- Stitched Border effect -->
+  <rect x="29" y="64" width="142" height="77" rx="8" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Minimal Leather Logo tag -->
+  <rect x="145" y="125" width="22" height="12" rx="2" fill="#d97706"/>
+</svg>
